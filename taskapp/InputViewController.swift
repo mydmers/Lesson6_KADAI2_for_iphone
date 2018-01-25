@@ -31,13 +31,22 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.view.addGestureRecognizer(tapGesture)
         
         titleTextField.text = task.title
-        contentsTextView.text = task.contents
-        datePicker.date = task.date as Date
-
+//-----------------------------
+        //ピッカーインスタンスを作成
         let pickerView = UIPickerView()
-        pickerView.dataSource = self
+        
+        pickerView.delegate = self
+        
+        //初めに表示する項目を指定
+//        pickerView.selectedRow(inComponent: 1)
+        
+        //選択中の行をハイライト
         pickerView.showsSelectionIndicator = true
         categoryField.inputView = pickerView
+
+//-----------------------------
+        contentsTextView.text = task.contents
+        datePicker.date = task.date as Date
         
 //        let categoryArray = realm.objects(Category.self)
     }
@@ -99,9 +108,11 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     
 //UIPickerViewDataSource
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
+        //表示する列数
+        return 1
     }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        //表示個数を返す
         return categoryArray.count
     }
     
@@ -109,11 +120,13 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     func pickerView(_ pickerView: UIPickerView,
                     titleForRow row: Int,
                     forComponent component: Int) -> String? {
-            return categoryArray[row].name
+        //表示する文字列を返す
+        return categoryArray[row].name
     }
     func pickerView(_ pickerView: UIPickerView,
                     didSelectRow row: Int,
                     inComponent component: Int) {
+        //選択時の処理方法
         categoryField.text = categoryArray[row].name
     }
 }
