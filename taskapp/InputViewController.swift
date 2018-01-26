@@ -15,7 +15,6 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoryField: UITextField!
     
     let realm = try! Realm()
@@ -61,7 +60,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date as NSDate
-            self.task.category?.name = self.categoryTextField.text!
+            self.task.category?.name = self.categoryField.text!
             self.realm.add(self.task, update: true)
         }
         
