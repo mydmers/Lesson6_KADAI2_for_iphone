@@ -37,12 +37,12 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     
     // MARK: UITableViewDataSourceプロトコルのメソッド
     // データの数（＝セルの数）を返すメソッド
-    func tableView2(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryArray.count  // ←追加する
     }
     
     // 各セルの内容を返すメソッド
-    func tableView2(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 再利用可能な cell を得る
         let cell = tableview2.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
         
@@ -55,17 +55,17 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     
     // MARK: UITableViewDelegateプロトコルのメソッド
     // 各セルを選択した時に実行されるメソッド
-    func tableView2(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "cellSegue",sender: nil)
     }
     
     // セルが削除が可能なことを伝えるメソッド
-    func tableView2(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath)-> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath)-> UITableViewCellEditingStyle {
         return UITableViewCellEditingStyle.delete
     }
     
     // Delete ボタンが押された時に呼ばれるメソッド
-    func tableView2(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             
             // 削除されたタスクを取得する
