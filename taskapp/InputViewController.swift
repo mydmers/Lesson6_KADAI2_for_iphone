@@ -19,6 +19,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     
     let realm = try! Realm()
     var task:Task!
+    var category:Category!
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)  // ←追加
     
     
@@ -31,17 +32,19 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         
         titleTextField.text = task.title
 //-----------------------------
-        //ピッカーインスタンスを作成
+        categoryField.text = task.category?.name
+        
+/*        //ピッカーインスタンスを作成
         let pickerView = UIPickerView()
         
         pickerView.delegate = self
         
         //初めに表示する項目を指定
-//        pickerView.selectedRow(inComponent: 1)
+        pickerView.selectedRow(inComponent: 1)
         
         //選択中の行をハイライト
         pickerView.showsSelectionIndicator = true
-        categoryField.inputView = pickerView
+        categoryField.inputView = pickerView */
 
 //-----------------------------
         contentsTextView.text = task.contents

@@ -17,14 +17,25 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     //Realmインスタンスを取得する
     let realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        //表示する列数
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView,
+                    numberOfRowsInComponent component: Int) -> Int {
+        //表示個数を示す
+        return categoryArray.count
+    }
+    
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        tableView2.delegate = self
-        tableView2.dataSource = self
+        tableview2.delegate = self
+        tableview2.dataSource = self
         
         categoryArray = realm.objects(Category.self)
             .sorted(byKeyPath: "id", ascending: false)
@@ -47,7 +58,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
         let cell = tableview2.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
         
         // Cellに値を設定する.
-        let task = categoryArray[indexPath.row]
+        let category = categoryArray[indexPath.row]
         cell.textLabel?.text = category.name
         
         return cell
@@ -69,7 +80,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
         if editingStyle == UITableViewCellEditingStyle.delete {
             
             // 削除されたタスクを取得する
-            let task = self.categoryArray[indexPath.row]
+            let category = self.categoryArray[indexPath.row]
             
             // ローカル通知をキャンセルする
             let center = UNUserNotificationCenter.current()
@@ -96,11 +107,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
         let inputViewController:InputViewController = segue.destination as! InputViewController
         
         if segue.identifier == "cellSegue" {
-            let indexPath = self.tableView.indexPathForSelectedRow
+            let indexPath = self.tableview2.indexPathForSelectedRow
             inputViewController.category = categoryArray[indexPath!.row]
         } else {
             let category = Category()
-//            task.date = NSDate()
             
             if categoryArray.count != 0 {
                 category.id = categoryArray.max(ofProperty: "id")! + 1
@@ -113,6 +123,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     // 入力画面から戻ってきた時に TableView を更新させる
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
+        tableview2.reloadData()
     }
 }
