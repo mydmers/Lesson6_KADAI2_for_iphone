@@ -17,6 +17,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     //Realmインスタンスを取得する
     let realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)
+    var category:Category!
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         //表示する列数
@@ -102,27 +103,17 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
             }
         }
     }
-    // segue で画面遷移するに呼ばれる
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
-        let inputViewController:InputViewController = segue.destination as! InputViewController
-        
-        if segue.identifier == "cellSegue" {
-            let indexPath = self.tableview2.indexPathForSelectedRow
-            inputViewController.category = categoryArray[indexPath!.row]
-        } else {
-            let category = Category()
-            
-            if categoryArray.count != 0 {
-                category.id = categoryArray.max(ofProperty: "id")! + 1
-            }
-            
-            inputViewController.category = category
-        }
-    }
     
     // 入力画面から戻ってきた時に TableView を更新させる
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableview2.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        try! realm.write {
+            self.category.name = self.titleTextField.text!
+            self.realm.add(self.category, update: true)
+        }
     }
 }

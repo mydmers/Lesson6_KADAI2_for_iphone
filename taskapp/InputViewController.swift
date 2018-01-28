@@ -131,4 +131,23 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         //選択時の処理方法
         categoryField.text = categoryArray[row].name
     }
+    
+    // segue で画面遷移するに呼ばれる
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        let categoryViewController:CategoryViewController = segue.destination as! CategoryViewController
+        
+        if segue.identifier == "cellSegue" {
+            let indexPath = categoryViewController.tableview2.indexPathForSelectedRow
+            categoryViewController.category = categoryArray[indexPath!.row]
+        } else {
+            let category = Category()
+            
+            if categoryArray.count != 0 {
+                category.id = categoryArray.max(ofProperty: "id")! + 1
+            }
+            
+            categoryViewController.category = category
+        }
+    }
+
 }
