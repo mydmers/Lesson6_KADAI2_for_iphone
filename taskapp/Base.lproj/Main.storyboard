@@ -194,6 +194,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <segue destination="cjS-jN-LfX" kind="show" identifier="cellSegue" id="z8T-nF-bTt"/>
+                                </connections>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nUn-CS-qLM">
                                 <rect key="frame" x="16" y="222" width="288" height="120"/>
@@ -235,7 +238,6 @@
                         <outlet property="contentsTextView" destination="nUn-CS-qLM" id="mAJ-Qx-bON"/>
                         <outlet property="datePicker" destination="5Yc-Dn-3tx" id="5pg-Oe-Phi"/>
                         <outlet property="titleTextField" destination="ZRa-C3-Cdt" id="ZM2-Qe-W4l"/>
-                        <segue destination="cjS-jN-LfX" kind="show" identifier="cellSegue" id="bT2-ks-xJe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G5R-Xb-wIm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -263,6 +265,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="8ue-gS-ir0"/>
-        <segue reference="bT2-ks-xJe"/>
+        <segue reference="z8T-nF-bTt"/>
     </inferredMetricsTieBreakers>
 </document>
