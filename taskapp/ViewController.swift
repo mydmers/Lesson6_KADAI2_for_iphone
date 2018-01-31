@@ -29,6 +29,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
+
+        
         searchText.delegate = self
         
         taskArray = realm.objects(Task.self)

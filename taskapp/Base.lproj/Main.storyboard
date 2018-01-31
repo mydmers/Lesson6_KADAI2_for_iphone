@@ -284,7 +284,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="categoryField" destination="l9N-8U-cGU" id="eIV-YM-GF0"/>
+                        <outlet property="categoryField" destination="l9N-8U-cGU" id="9OC-O3-Pid"/>
                         <outlet property="contentsTextView" destination="nUn-CS-qLM" id="mAJ-Qx-bON"/>
                         <outlet property="datePicker" destination="5Yc-Dn-3tx" id="5pg-Oe-Phi"/>
                         <outlet property="titleTextField" destination="ZRa-C3-Cdt" id="ZM2-Qe-W4l"/>
@@ -293,7 +293,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G5R-Xb-wIm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1118" y="-184"/>
+            <point key="canvasLocation" x="1478" y="-242"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="V5e-NK-cmy">
@@ -315,8 +315,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8ue-gS-ir0"/>
-        <segue reference="2Wz-5r-Sps"/>
         <segue reference="pZd-c4-cJo"/>
+        <segue reference="2Wz-5r-Sps"/>
+        <segue reference="8ue-gS-ir0"/>
     </inferredMetricsTieBreakers>
 </document>

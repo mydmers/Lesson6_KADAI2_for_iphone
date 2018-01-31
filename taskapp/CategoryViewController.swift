@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import UserNotifications    // 追加
 
-class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSource, UITableViewDataSource {
+class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableview2: UITableView!
     
@@ -18,18 +18,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
     let realm = try! Realm()
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)
     var category:Category!
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        //表示する列数
-        return 1
-    }
-    func pickerView(_ pickerView: UIPickerView,
-                    numberOfRowsInComponent component: Int) -> Int {
-        //表示個数を示す
-        return categoryArray.count
-    }
-    
-
+    var selectedCategory:Category!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,7 +92,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
             }
         }
     }
-    
+        
     // segue で画面遷移するに呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         let categoryInputViewController:CategoryInputViewController = segue.destination as! CategoryInputViewController
@@ -117,6 +106,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
             
             if categoryArray.count != 0 {
                 category.id = categoryArray.max(ofProperty: "id")! + 1
+                
+                print(category.id)
             }
             
             categoryInputViewController.category = category

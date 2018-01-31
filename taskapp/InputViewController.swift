@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import UserNotifications    // 追加
 
-class InputViewController: UIViewController {
+class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
@@ -20,7 +20,9 @@ class InputViewController: UIViewController {
     let realm = try! Realm()
     var task:Task!
     var category:Category!
+    var selectedCategory:String!
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)  // ←追加
+    var pickerView: UIPickerView = UIPickerView()
     
     
     override func viewDidLoad() {
@@ -29,6 +31,22 @@ class InputViewController: UIViewController {
         // 背景をタップしたらdismissKeyboardメソッドを呼ぶように設定する
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
+        
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        pickerView.showsSelectionIndicator = true
+        
+        let toolbar = UIToolbar()
+        toolbar.barStyle = UIBarStyle.default
+        toolbar.isTranslucent = true
+        toolbar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolbar.sizeToFit()
+//        let donebutton = UIBarButtonItem(ty, target: self, action: pickerView)
+//        let cancelbutton = UIBarButtonItem(title: Cancel, style: <#T##UIBarButtonItemStyle#>, target: self, action: #selector(getter: InputViewController.pickerView))
+//        toolbar.setItems(["Cancel", "Done"], animated: false)
+        toolbar.isUserInteractionEnabled = true
+        self.categoryField.inputView = pickerView
+        self.categoryField.inputAccessoryView = toolbar
         
         titleTextField.text = task.title
         categoryField.text = task.category?.name
@@ -47,7 +65,7 @@ class InputViewController: UIViewController {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date as NSDate
-            self.task.category?.name = self.categoryField.text!
+            self.task.category?.name = selectedCategory
             self.realm.add(self.task, update: true)
         }
         
@@ -91,6 +109,34 @@ class InputViewController: UIViewController {
             }
         }
     }
+    
+    //UIPickerViewDataSource
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        //表示する列数
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        //表示個数を返す
+        return categoryArray.count
+    }
+    
+    //pickerView
+    func pickerView(_ pickerView: UIPickerView,
+                    titleForRow row: Int,
+                    forComponent component: Int) -> String? {
+        //表示する文字列を返す
+        return categoryArray[row].name
+    }
+    func pickerView(_ pickerView: UIPickerView,
+                    didSelectRow row: Int,
+                    inComponent component: Int) {
+        //選択時の処理方法
+        categoryField.text = categoryArray[row].name
+        self.task.category?.name = categoryField.text!
+    }
+
+    
+    
     
     // segue で画面遷移するに呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
