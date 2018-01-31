@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import UserNotifications    // 追加
 
-class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class InputViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
@@ -31,26 +31,10 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.view.addGestureRecognizer(tapGesture)
         
         titleTextField.text = task.title
-//-----------------------------
         categoryField.text = task.category?.name
-        
-/*        //ピッカーインスタンスを作成
-        let pickerView = UIPickerView()
-        
-        pickerView.delegate = self
-        
-        //初めに表示する項目を指定
-        pickerView.selectedRow(inComponent: 1)
-        
-        //選択中の行をハイライト
-        pickerView.showsSelectionIndicator = true
-        categoryField.inputView = pickerView */
-
-//-----------------------------
         contentsTextView.text = task.contents
         datePicker.date = task.date as Date
         
-//        let categoryArray = realm.objects(Category.self)
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,30 +90,6 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                 print("---------------/")
             }
         }
-    }
-    
-//UIPickerViewDataSource
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        //表示する列数
-        return 1
-    }
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        //表示個数を返す
-        return categoryArray.count
-    }
-    
-//pickerView
-    func pickerView(_ pickerView: UIPickerView,
-                    titleForRow row: Int,
-                    forComponent component: Int) -> String? {
-        //表示する文字列を返す
-        return categoryArray[row].name
-    }
-    func pickerView(_ pickerView: UIPickerView,
-                    didSelectRow row: Int,
-                    inComponent component: Int) {
-        //選択時の処理方法
-        categoryField.text = categoryArray[row].name
     }
     
     // segue で画面遷移するに呼ばれる

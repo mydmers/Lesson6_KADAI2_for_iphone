@@ -14,6 +14,7 @@
 		0A1D39AD2000C7E70081CC11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A1D39AB2000C7E70081CC11 /* LaunchScreen.storyboard */; };
 		0A1D39B52001006E0081CC11 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1D39B42001006E0081CC11 /* InputViewController.swift */; };
 		0A4245DD201659C300FE4404 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4245DC201659C300FE4404 /* CategoryViewController.swift */; };
+		0A7FA4FA201F590F003A85AA /* CategoryInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FA4F9201F590F003A85AA /* CategoryInputViewController.swift */; };
 		0AC93DD12003B49700FAB843 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC93DD02003B49700FAB843 /* Task.swift */; };
 		2F4C4225700E589E25A3706C /* Pods_taskapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9594345DCF20F27FE3E85D41 /* Pods_taskapp.framework */; };
 		954ED6A8201242860015AAA9 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954ED6A7201242860015AAA9 /* Category.swift */; };
@@ -29,6 +30,7 @@
 		0A1D39AE2000C7E70081CC11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A1D39B42001006E0081CC11 /* InputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		0A4245DC201659C300FE4404 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		0A7FA4F9201F590F003A85AA /* CategoryInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryInputViewController.swift; sourceTree = "<group>"; };
 		0AC93DD02003B49700FAB843 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		23A89DF18EE625EF568FC267 /* Pods-taskapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-taskapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-taskapp/Pods-taskapp.release.xcconfig"; sourceTree = "<group>"; };
 		954ED6A7201242860015AAA9 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				0A1D39A22000C7E70081CC11 /* AppDelegate.swift */,
 				0A1D39A42000C7E70081CC11 /* ViewController.swift */,
 				0A1D39A62000C7E70081CC11 /* Main.storyboard */,
+				0A7FA4F9201F590F003A85AA /* CategoryInputViewController.swift */,
 				0A1D39A92000C7E70081CC11 /* Assets.xcassets */,
 				0A1D39AB2000C7E70081CC11 /* LaunchScreen.storyboard */,
 				0A1D39AE2000C7E70081CC11 /* Info.plist */,
@@ -227,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AC93DD12003B49700FAB843 /* Task.swift in Sources */,
+				0A7FA4FA201F590F003A85AA /* CategoryInputViewController.swift in Sources */,
 				954ED6A8201242860015AAA9 /* Category.swift in Sources */,
 				0A1D39B52001006E0081CC11 /* InputViewController.swift in Sources */,
 				0A1D39A52000C7E70081CC11 /* ViewController.swift in Sources */,

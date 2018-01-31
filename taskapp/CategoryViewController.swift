@@ -104,16 +104,29 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UIPickerVie
         }
     }
     
+    // segue で画面遷移するに呼ばれる
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        let categoryInputViewController:CategoryInputViewController = segue.destination as! CategoryInputViewController
+        
+        if segue.identifier == "cellSegue" {
+            let indexPath = self.tableview2.indexPathForSelectedRow
+            categoryInputViewController.category = categoryArray[indexPath!.row]
+        } else {
+            let category = Category()
+//            task.date = NSDate()
+            
+            if categoryArray.count != 0 {
+                category.id = categoryArray.max(ofProperty: "id")! + 1
+            }
+            
+            categoryInputViewController.category = category
+        }
+    }
+    
     // 入力画面から戻ってきた時に TableView を更新させる
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableview2.reloadData()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        try! realm.write {
-            self.category.name = self.titleTextField.text!
-            self.realm.add(self.category, update: true)
-        }
-    }
 }
