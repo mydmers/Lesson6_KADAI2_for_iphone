@@ -42,6 +42,12 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         toolbar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         toolbar.sizeToFit()
 //        let donebutton = UIBarButtonItem(ty, target: self, action: pickerView)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped(_:)))
+        toolbar.setItems([cancelButton, space, doneButton], animated: false)
+        
+        
 //        let cancelbutton = UIBarButtonItem(title: Cancel, style: <#T##UIBarButtonItemStyle#>, target: self, action: #selector(getter: InputViewController.pickerView))
 //        toolbar.setItems(["Cancel", "Done"], animated: false)
         toolbar.isUserInteractionEnabled = true
@@ -55,6 +61,14 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         
     }
     
+    func doneTapped(_ sender:UIBarButtonItem)  {
+        self.dismissKeyboard()
+    }
+    
+    func cancelTapped(_ sender: UIBarButtonItem) {
+        self.dismissKeyboard()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -65,7 +79,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date as NSDate
-            self.task.category?.name = selectedCategory
+            self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
             self.realm.add(self.task, update: true)
         }
         
@@ -132,13 +146,12 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                     inComponent component: Int) {
         //選択時の処理方法
         categoryField.text = categoryArray[row].name
-        self.task.category?.name = categoryField.text!
     }
 
     
     
     
-    // segue で画面遷移するに呼ばれる
+    // segue で画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         let categoryViewController:CategoryViewController = segue.destination as! CategoryViewController
         
