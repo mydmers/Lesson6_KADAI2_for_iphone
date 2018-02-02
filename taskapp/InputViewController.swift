@@ -74,6 +74,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                     self.task.category?.name = nil
                 }*/
                 self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+                categoryField.text = self.task.category?.name
             }
             self.realm.add(self.task, update: true)
         }
