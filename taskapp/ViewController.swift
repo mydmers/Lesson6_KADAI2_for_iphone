@@ -53,7 +53,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if !searchText.isEmpty {
             // 検索の文字列が空でないとき、フィルタをかける
-            let predicate = NSPredicate(format: "category contains %@", searchText)
+            let predicate = NSPredicate(format: "category.name contains %@", searchText)
             
             taskArray = realm.objects(Task.self)
                 .filter(predicate)

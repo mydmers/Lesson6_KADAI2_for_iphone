@@ -20,7 +20,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     let realm = try! Realm()
     var task:Task!
     var category:Category!
-    var selectedCategory:String!
+    var selectedCategory:Int!
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)  // ←追加
     var pickerView: UIPickerView = UIPickerView()
     
@@ -63,6 +63,20 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     
     func doneTapped(_ sender:UIBarButtonItem)  {
         self.dismissKeyboard()
+        try! realm.write {
+            self.task.title = self.titleTextField.text!
+            self.task.contents = self.contentsTextView.text
+            self.task.date = self.datePicker.date as NSDate
+            
+            selectedCategory = pickerView.selectedRow(inComponent: 0)
+            if (self.categoryArray.count > 0) {
+/*                if (categoryField == nil) {
+                    self.task.category?.name = nil
+                }*/
+                self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+            }
+            self.realm.add(self.task, update: true)
+        }
     }
     
     func cancelTapped(_ sender: UIBarButtonItem) {
@@ -79,7 +93,13 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date as NSDate
-            self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+            selectedCategory = pickerView.selectedRow(inComponent: 0)
+            if (self.categoryArray.count > 0) {
+/*                if categoryField.isEmpty {
+                    self.task.category?.name =
+                }*/
+                self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+            }
             self.realm.add(self.task, update: true)
         }
         
@@ -147,9 +167,6 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         //選択時の処理方法
         categoryField.text = categoryArray[row].name
     }
-
-    
-    
     
     // segue で画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
