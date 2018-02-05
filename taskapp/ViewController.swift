@@ -10,17 +10,23 @@ import UIKit
 import RealmSwift // 追加
 import UserNotifications    // 追加
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchText: UISearchBar!
+    @IBOutlet weak var searchText2: UITextField!
     
-    // Realmインスタンスを取得する
-    let realm = try! Realm()  // ←追加
-    
-    // DB内のタスクが格納されるリスト。
-    // 日付近い順\順でソート：降順
-    // 以降内容をアップデートするとリスト内は自動的に更新される。
+    let realm = try! Realm()
+    var task:Task!
+    var category:Category!
+    var selectedCategory:Int!
+    var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)  // ←追加
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)  // ←追加
+    var pickerView: UIPickerView = UIPickerView()
+    var searchText_temp:String!
+
+    let toolbar = UIToolbar()
+    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+    let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,32 +35,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
+        pickerView.delegate = self
+        
+        toolbar.barStyle = UIBarStyle.default
+        toolbar.isTranslucent = true
+        toolbar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolbar.sizeToFit()
+        toolbar.setItems([cancelButton, space, doneButton], animated: false)
+        toolbar.isUserInteractionEnabled = true
+        
+        self.searchText2.inputView = pickerView
+        self.searchText2.inputAccessoryView = toolbar
+        
+    }
 
+    //done
+    func doneTapped(_ sender:UIBarButtonItem)  {
+        self.dismissKeyboard()
         
-        searchText.delegate = self
-        
-        taskArray = realm.objects(Task.self)
-            .sorted(byKeyPath: "date", ascending: false)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-        
-    // MARK: UITableViewDataSourceプロトコルのメソッド
-    // データの数（＝セルの数）を返すメソッド
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskArray.count  // ←追加する
-    }
-    
-    //検索ボタン押下時の呼び出しメソッド
-    func searchBar(_ searchBar: UISearchBar,  textDidChange searchText: String) {
-        
-        if !searchText.isEmpty {
+        searchText_temp = searchText2.text!
+        if !searchText_temp.isEmpty {
             // 検索の文字列が空でないとき、フィルタをかける
-            let predicate = NSPredicate(format: "category.name contains %@", searchText)
-            
+            let predicate = NSPredicate(format: "category.name contains %@", (searchText_temp)!)
             taskArray = realm.objects(Task.self)
                 .filter(predicate)
                 .sorted(byKeyPath: "date", ascending: false)
@@ -68,7 +70,52 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //テーブルを再読み込みする。
         tableView.reloadData()
     }
+  
+    //cancel
+    func cancelTapped(_ sender: UIBarButtonItem) {
+        self.dismissKeyboard()
+    }
+
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+        
+    // MARK: UITableViewDataSourceプロトコルのメソッド
+    // データの数（＝セルの数）を返すメソッド
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return taskArray.count  // ←追加する
+    }
+
+/*
+    //検索ボタン押下時の呼び出しメソッド
+    func searchBar(_ searchBar: UISearchBar,  textDidChange searchText2: String) {
+        
+        if !searchText2.isEmpty {
+            // 検索の文字列が空でないとき、フィルタをかける
+            
+            let predicate = NSPredicate(format: "category.name contains %@", (searchText_temp)!)
+            taskArray = realm.objects(Task.self)
+                .filter(predicate)
+                .sorted(byKeyPath: "date", ascending: false)
+        }
+        else {
+            // 検索の文字列が空のとき
+            taskArray = realm.objects(Task.self)
+                .sorted(byKeyPath: "date", ascending: false)
+        }
+        
+        //テーブルを再読み込みする。
+        tableView.reloadData()
+    }
+ */
+ 
+    func dismissKeyboard(){
+        // キーボードを閉じる
+        view.endEditing(true)
+    }
+
     // 各セルの内容を返すメソッド
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 再利用可能な cell を得る
@@ -124,6 +171,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
+    
+    //UIPickerViewDataSource
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        //表示する列数
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        //表示個数を返す
+        return categoryArray.count
+    }
+    
+    //pickerView
+    func pickerView(_ pickerView: UIPickerView,
+                    titleForRow row: Int,
+                    forComponent component: Int) -> String? {
+        //表示する文字列を返す
+        return categoryArray[row].name
+    }
+    func pickerView(_ pickerView: UIPickerView,
+                    didSelectRow row: Int,
+                    inComponent component: Int) {
+        //選択時の処理方法
+        searchText2.text = categoryArray[row].name
+    }
+
         // segue で画面遷移するに呼ばれる
         override func prepare(for segue: UIStoryboardSegue, sender: Any?){
             let inputViewController:InputViewController = segue.destination as! InputViewController

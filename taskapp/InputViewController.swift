@@ -24,6 +24,10 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     var categoryArray = try! Realm().objects(Category.self).sorted(byKeyPath: "id", ascending: false)  // ←追加
     var pickerView: UIPickerView = UIPickerView()
     
+    let toolbar = UIToolbar()
+    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+    let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped(_:)))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,27 +37,19 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.view.addGestureRecognizer(tapGesture)
         
         pickerView.delegate = self
-        pickerView.dataSource = self
-        pickerView.showsSelectionIndicator = true
-        
-        let toolbar = UIToolbar()
+ 
+        //toolbar設定
         toolbar.barStyle = UIBarStyle.default
         toolbar.isTranslucent = true
         toolbar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         toolbar.sizeToFit()
-//        let donebutton = UIBarButtonItem(ty, target: self, action: pickerView)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped(_:)))
         toolbar.setItems([cancelButton, space, doneButton], animated: false)
-        
-        
-//        let cancelbutton = UIBarButtonItem(title: Cancel, style: <#T##UIBarButtonItemStyle#>, target: self, action: #selector(getter: InputViewController.pickerView))
-//        toolbar.setItems(["Cancel", "Done"], animated: false)
         toolbar.isUserInteractionEnabled = true
+        
         self.categoryField.inputView = pickerView
         self.categoryField.inputAccessoryView = toolbar
-        
+
+        //入力項目（タイトル、カテゴリ、内容、日時）
         titleTextField.text = task.title
         categoryField.text = task.category?.name
         contentsTextView.text = task.contents
@@ -70,9 +66,6 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             
             selectedCategory = pickerView.selectedRow(inComponent: 0)
             if (self.categoryArray.count > 0) {
-/*                if (categoryField == nil) {
-                    self.task.category?.name = nil
-                }*/
                 self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
                 categoryField.text = self.task.category?.name
             }
@@ -91,21 +84,28 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     
     override func viewWillDisappear(_ animated: Bool) {
         try! realm.write {
-            self.task.title = self.titleTextField.text!
-            self.task.contents = self.contentsTextView.text
-            self.task.date = self.datePicker.date as NSDate
-            selectedCategory = pickerView.selectedRow(inComponent: 0)
-            if (self.categoryArray.count > 0) {
-/*                if categoryField.isEmpty {
-                    self.task.category?.name =
-                }*/
-                self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+            if (self.titleTextField.text) == nil {
+                self.task.title = self.titleTextField.text!
+                self.task.contents = self.contentsTextView.text
+                self.task.date = self.datePicker.date as NSDate
+                selectedCategory = pickerView.selectedRow(inComponent: 0)
+                if (self.categoryArray.count > 0) {
+                    self.task.category = self.categoryArray[pickerView.selectedRow(inComponent: 0)]
+                    categoryField.text = self.task.category?.name
+                }
+            }
+            else {
+                self.task.title = self.titleTextField.text!
+                self.task.contents = self.contentsTextView.text
+                self.task.date = self.datePicker.date as NSDate
+                selectedCategory = pickerView.selectedRow(inComponent: 0)
+                if (self.categoryArray.count > 0) {
+                    categoryField.text = self.task.category?.name
+                }
             }
             self.realm.add(self.task, update: true)
         }
-        
         setNotification(task: task)
-        
         super.viewWillDisappear(animated)
     }
     
@@ -133,6 +133,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         let center = UNUserNotificationCenter.current()
         center.add(request) { (error) in
             print(error ?? "ローカル通知登録 OK")  // error が nil ならローカル通知の登録に成功したと表示します。errorが存在すればerrorを表示します。
+            print("ローカル通知登録", self.categoryField)
         }
         
         // 未通知のローカル通知一覧をログ出力
@@ -162,6 +163,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         //表示する文字列を返す
         return categoryArray[row].name
     }
+    
     func pickerView(_ pickerView: UIPickerView,
                     didSelectRow row: Int,
                     inComponent component: Int) {
@@ -176,6 +178,7 @@ class InputViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         if segue.identifier == "cellSegue" {
             let indexPath = categoryViewController.tableview2.indexPathForSelectedRow
             categoryViewController.category = categoryArray[indexPath!.row]
+            
         } else {
             let category = Category()
             
